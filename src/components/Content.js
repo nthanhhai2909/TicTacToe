@@ -1,5 +1,4 @@
 import React from 'react';
-import InformationGame from './InformationGame';
 import Game from './Game'
 import Header from './Header1';
 import {Label, Col, FormControl, FormGroup, ControlLabel, MenuItem, DropdownButton, ButtonToolbar} from 'react-bootstrap';

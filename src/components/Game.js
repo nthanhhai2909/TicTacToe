@@ -9,6 +9,7 @@ export default class Game extends React.Component{
         this.state={
             board: new Array(this.props.numberCell).fill(new Array(this.props.numberCell).fill(null)),
         }
+        this.getCoodinate = this.getCoodinate.bind(this);
 
         
     };
@@ -17,6 +18,7 @@ export default class Game extends React.Component{
         arrayvar = new Array(i).fill(new Array(i).fill(null));
         this.setState({ board: arrayvar })
     }
+    
 
     shouldComponentUpdate(nextProps, nextState){
         return true;
@@ -29,10 +31,14 @@ export default class Game extends React.Component{
           
     }
 
+    getCoodinate(row, col){
+        alert("dmm " + row + '-' + col);
+    }
+
     render()
     { 
         return(
-            <Board board={this.state.board}/>
+            <Board board={this.state.board} getCoodinate={this.getCoodinate}/>
         );
     }
 
