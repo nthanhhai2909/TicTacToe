@@ -9,8 +9,9 @@ export default class Square extends React.Component {
     super(props);
   }
     render() {
+      //{this.props.board[this.props.rowIndex][this.props.colIndex]}
       return (
-          <button className="button" onClick={this.props.onClick}>{this.props.values}</button>  
+          <button className="button" onClick={this.props.onClick}></button>  
       );
     }
   }

@@ -3,3 +3,21 @@
     height: 25px;
     background-color: white;
 }
+
+.infor{
+    display: inline-block;
+
+}
+.infor label{
+    display: inline-block;
+    margin-right: 30px;
+    margin-bottom: 50px;
+    width: 50px;
+    height: 50px;
+}
+.infor h4{
+    display: inline-block;
+}
+.infor Drow{
+    display: inline-block;
+}
