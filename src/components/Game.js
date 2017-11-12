@@ -59,18 +59,21 @@ export default class Game extends React.Component{
         if(nextState.turn !== this.state.turn){
             
             this.props.getNextPlayer(nextState.turn);
-            console.log("hihi", nextState.board);
-            if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) === true){
+            if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) === true)
                 alert("win");
             }
-        }
+        
     }
 
     getCoodinate(row, col){
-        this.setState({rowNow: row});
-        this.setState({colNow: col})
-        this.handleChangeTurn();
-        this.HandleSetChangeBoard(row, col);
+        if(this.state.board[row][col] === null){
+            console.log("hihi");
+            this.setState({rowNow: row});
+            this.setState({colNow: col})
+            this.handleChangeTurn();
+            this.HandleSetChangeBoard(row, col);
+        }
+        
     }
 
     HandleSetChangeBoard(row, col){
