@@ -18,12 +18,22 @@ export default class Content extends React.Component{
         this.render = this.render.bind(this);
         this.updateHistory = this.updateHistory.bind(this);
         this.rollBack = this.rollBack.bind(this);
+        this.reload = this.reload.bind(this);
         
 
     }   
 
     getNextPlayer(i){
         this.setState({turn: i});
+    }
+
+    reload()
+    {
+        this.setState({history: []});
+        this.setState({rollBackArr: []});
+        this.setState({turn: "x"});
+        this.setState({numberCell: 0});
+
     }
 
     updateHistory(move){
@@ -42,22 +52,12 @@ export default class Content extends React.Component{
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        if(nextState.numberCell !== this.state.numberCell){
-            return true;
-        }
-        if(nextState.turn != this.state.turn){
-            return true;
-        }
-        if(nextState.rollBackArr.length > 0 && nextState.rollBackArr !== this.state.rollBackArr){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     componentWillUpdate(nextProps, nextState) { 
         if(nextState.rollBackArr.length > 0 && nextState.rollBackArr !== this.state.rollBackArr){
             this.setState({rollBackArr: []});
-            this.render();
         }
     }
 
@@ -95,7 +95,7 @@ export default class Content extends React.Component{
                         <hr/>
                         <Game numberCell={this.state.numberCell} 
                             getNextPlayer={this.getNextPlayer} updateHistory={this.updateHistory}
-                            history={this.state.rollBackArr}
+                            history={this.state.rollBackArr} reload={this.reload}
                         />
                     </div>
                 </div>

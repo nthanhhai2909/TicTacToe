@@ -2,11 +2,22 @@
     width: 25px;
     height: 25px;
     background-color: white;
+    outline: none;
 }
 .my-btn {
     width: 40px;
     height: 40px;
+    background-color: green;
     font-size: 140%;
+    outline: none;
+
+}
+
+.my-btn-win{
+    width: 40px;
+    height: 40px;
+    font-size: 140%;
+    background-color: red ;
 }
 .infor{
     display: inline-block;

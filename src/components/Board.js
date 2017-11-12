@@ -15,12 +15,11 @@ export default class Board extends React.Component {
 
   render() {
     return (
-      
       <div>
         {
           this.props.board
           .map((row, index) =>
-           <Cell Cell={row} getRowAndCol={this.getRowAndCol} row={index} values={this.props.board} />)
+           <Cell Cell={row} getRowAndCol={this.getRowAndCol} row={index} values={this.props.board} listBoxWin={this.props.listBoxWin} />)
         }
       </div>
     );

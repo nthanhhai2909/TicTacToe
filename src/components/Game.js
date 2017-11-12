@@ -11,10 +11,12 @@ export default class Game extends React.Component{
             turn: null,
             rowNow: null,
             colNow: null,
+            listBoxWin: []
 
         }
         this.handleChangeCellNumber = this.handleChangeCellNumber.bind(this);
         this.getCoodinate = this.getCoodinate.bind(this);
+        this.reload = this.reload.bind(this);
     };
 
     handleChangeTurn(){
@@ -27,9 +29,9 @@ export default class Game extends React.Component{
     }
 
     handleChangeCellNumber(i){
-        var arrayvar = this.state.board.slice();
-        arrayvar = Array.apply(null, Array(i)).map(() => new Array(i).fill(null));
+        var arrayvar = Array.apply(null, Array(i)).map(() => new Array(i).fill(null));
         this.setState({board: arrayvar })
+        this.setState({turn: 'x'}); 
         this.handleChangeTurn();
     }
     
@@ -48,23 +50,39 @@ export default class Game extends React.Component{
         if(nextProps.history !== this.props.history){
             return true;
         }
-   
+        if(nextState.listBoxWin !== this.state.listBoxWin){
+            return true;
+        }
         return false;
     }
 
-    componentWillUpdate(nextProps, nextState) {   
+    reload(){
+        this.props.reload();
+    }
+
+    componentWillUpdate(nextProps, nextState) {  
         if(nextProps.numberCell !== this.props.numberCell){
             this.handleChangeCellNumber(nextProps.numberCell);
-            this.setState({turn: 'x'});
+            this.setState({turn: "x"});
+            this.setState({listBoxWin: []});
+            
         } 
-
         if(nextState.turn !== this.state.turn){
-            this.props.getNextPlayer(nextState.turn);
-            if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) === true)
+            if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) !== null){
+                this.setState({listBoxWin: this.isWin(nextState.board, nextState.rowNow, nextState.colNow)});
                 alert(this.state.turn + " win");
+
+                setTimeout(() => this.reload(), 3000);
+            
+            }
+            else{
+                this.props.getNextPlayer(nextState.turn);  
+            }
+           
         }
 
         if(nextProps.history !== this.props.history ){
+            
             var turn;
             var arrayvar2 = Array.apply(null, Array(this.props.numberCell)).map(() => new Array(this.props.numberCell).fill(null));
             nextProps.history.map((ele, index) => 
@@ -105,78 +123,79 @@ export default class Game extends React.Component{
     isWin(board, rowCheck, colCheck){
 
         if(board === null){
-            return;
+            return null;
         }
         if(rowCheck === null || colCheck === null){
-            return;
+            return null;
         }
 
+        if(rowCheck > board.length || colCheck > board.length){
+            return null;
+        }
         var turn = board[rowCheck][colCheck];
 
         let index = colCheck;
-        let count = 0;
+        let arrBoxWin = [];
+        arrBoxWin.push[rowCheck, colCheck];
 
         while(index > 0){
             index--;
             if(board[rowCheck][index] === turn){
-                count++;
+                arrBoxWin.push([rowCheck, index]);
             }
             else{
-                index = colCheck;
-                break;   
+                break;
             }
-        }
 
-        while(index < board.length){
+        }
+        index = colCheck;
+        while(index < board.length -1){
             index++;
             if(board[rowCheck][index] === turn){
-                count++;
+                arrBoxWin.push([rowCheck, index]);
             }
             else{
                 break;
             }
         }
 
-        if(count >= 4){
-            return true;
+        if(arrBoxWin.length >= 5){
+            return arrBoxWin;
         }
         else{
             index = rowCheck;
-            count = 0;
+            arrBoxWin = [];
+            arrBoxWin.push([rowCheck, colCheck]);
         }
         //-------------------------------------------------------------
-
         while(index > 0){
             index--;
             if(board[index][colCheck] === turn){
-                count++;
+                arrBoxWin.push([index, colCheck]);
             }
             else{
-                index = rowCheck;
                 break;
                 
             }
         }
-
-        while(index < board.length){
-            if(index === (board.length -1)){
-                return;
-            }
+        index = rowCheck;
+        while(index < board.length - 1){
             index++;
             if(board[index][colCheck] === turn){
-                count++;
+                arrBoxWin.push([index, colCheck]);
             }
             else{
                 break;
             }
         }
 
-        if(count >=4){
-            return true;
+        if(arrBoxWin.length >=5){
+            return arrBoxWin;
         }
         else{
             index = rowCheck;
-            count = 0;
+            arrBoxWin = [];
+            arrBoxWin.push([rowCheck, colCheck]);
         }
 
         //------------------------------------------------------------------
@@ -188,80 +207,80 @@ export default class Game extends React.Component{
             rowIndex--;
             colIndex--;
             if(board[rowIndex][colIndex] === turn){
-                count++
+                arrBoxWin.push([rowIndex, colIndex]);
             }
             else{
-                rowCheck = rowCheck;
-                colIndex = colCheck;
                 break;
             }
         }
-
-        while(rowIndex < board.length && colIndex < board.length){
+        rowCheck = rowCheck;
+        colIndex = colCheck;
+        while(rowIndex < board.length - 1 && colIndex < board.length - 1){
             rowIndex++;
             colIndex++;
             if(board[rowIndex][colIndex] === turn){
-                count++;
+                arrBoxWin.push([rowIndex, colIndex]);
             }
             else{
                 break;
             }
         }
 
-        if(count >= 4){
-            return true;
+        if(arrBoxWin.length >= 5){
+            return arrBoxWin;
         }
         else{
             rowIndex = rowCheck;
             colIndex = colCheck;
-            count = 0;
+            arrBoxWin = [];
+            arrBoxWin.push([rowCheck, colCheck]);
         }
 
         //--------------------------------------------------------------
 
-        while(rowIndex > 0 && colCheck < board.length){
+        while(rowIndex > 0 && colCheck < board.length - 1){
             rowIndex--;
             colIndex++;
             if(board[rowIndex][colIndex] === turn){
-                count++;
+                arrBoxWin.push([rowIndex, colIndex]);
             }
             else{
-                rowIndex = rowCheck;
-                colIndex = colCheck;
+                
                 break;
             }
         }
-
-        while(rowIndex < board.length && colIndex > 0){
+        rowIndex = rowCheck;
+        colIndex = colCheck;
+        while(rowIndex < board.length - 1 && colIndex > 0){
             rowIndex++;
             colIndex--;
             if(rowIndex === board.length){
-                return;
+                return null;
             }
             if(board[rowIndex][colIndex] === turn){
-                count++;
+                arrBoxWin.push([rowIndex, colIndex]);
             }
             else{
                 break;
             }
         }
         
-        if(count >= 4){
-            return true;
+        if(arrBoxWin.length >= 5){
+            return arrBoxWin;
         }
         else{
             rowIndex = rowCheck;
             colIndex = colCheck;
-            count = 0;
+            arrBoxWin = [];
         }
 
-        return false;
+        return null;
     }
 
     render()
     {
         return(
-            <Board board={this.state.board} getCoodinate={this.getCoodinate}/>
+            <Board board={this.state.board} getCoodinate={this.getCoodinate} listBoxWin={this.state.listBoxWin}/>
         );
     }
 

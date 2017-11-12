@@ -7,12 +7,24 @@ export default class Square extends React.Component {
   constructor(props){
     super(props);
   }
-    render() {
-      const row = parseInt(this.props.rowIndex1);
-      const col = parseInt(this.props.colIndex);
-      const value = this.props.values[row][col];
-      return (
-          <button className="btn btn-success my-btn" onClick={this.props.onClick}>{value}</button >  
-      );
-    }
-  } 
+
+
+
+  render() {
+    let row = parseInt(this.props.rowIndex1);
+    let col = parseInt(this.props.colIndex);
+    let value = this.props.values[row][col];
+    let check = false;
+    this.props.listBoxWin.map(e => {
+      if(e[0] === row && e[1] === col){
+        check = true;
+      }
+    });
+
+    return (
+      check ?
+         <button className="btn my-btn-win"  onClick={this.props.onClick} >{value}</button >
+        :  <button className="btn my-btn"onClick={this.props.onClick} >{value}</button > 
+    )
+  }
+} 
