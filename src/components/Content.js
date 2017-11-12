@@ -35,6 +35,9 @@ export default class Content extends React.Component{
     }
 
     handleClickSetCellNumber(i){
+        this.setState({history: []});
+        this.setState({rollBackArr: []});
+        this.setState({turn: "x"});
         this.setState({numberCell: i});
     }
 
