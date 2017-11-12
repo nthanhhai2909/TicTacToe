@@ -4,14 +4,15 @@ import '../css/index.css';
 
 
 export default class Square extends React.Component {
-
   constructor(props){
     super(props);
   }
     render() {
-      //{this.props.board[this.props.rowIndex][this.props.colIndex]}
+      const row = parseInt(this.props.rowIndex1);
+      const col = parseInt(this.props.colIndex);
+      const value = this.props.values[row][col];
       return (
-          <button className="button" onClick={this.props.onClick}></button>  
+          <button className="btn btn-success my-btn" onClick={this.props.onClick}>{value}</button >  
       );
     }
-  }
+  } 

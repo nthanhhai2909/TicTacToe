@@ -6,9 +6,10 @@ export default class Board extends React.Component {
 
     render(){
         return(
+            
             <div>
             {
-                this.props.numberCell.map((box, index) => <Square value={this.props.board} rowIndex={this.props.row} colIndex={index}
+                this.props.Cell.map((box, index) => <Square values={this.props.values} rowIndex1={this.props.row} colIndex={index}
                 onClick={() =>this.props.getRowAndCol(this.props.row, index)}/>)
             }
             <br/>

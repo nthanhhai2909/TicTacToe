@@ -22,6 +22,7 @@ export default class Content extends React.Component{
 
     handleClickSetCellNumber(i){
         this.setState({numberCell: i});
+        console.log("number " + this.state.numberCell);
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -41,7 +42,7 @@ export default class Content extends React.Component{
     renderInformationGame(){
         return(
         <div className="infor">
-            <div >
+            <div d-inline>
                 <label>Cell Number</label>
                 <DropdownButton bsSize="medium" title="Select cell number" id="dropdown-size-medium">
                     <MenuItem  onClick={()=>this.handleClickSetCellNumber(10)}>10x10</MenuItem>

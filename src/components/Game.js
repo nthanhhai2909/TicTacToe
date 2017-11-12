@@ -7,8 +7,10 @@ export default class Game extends React.Component{
         super(props);
 
         this.state={
-            board: new Array(this.props.numberCell).fill(new Array(this.props.numberCell).fill(null)),
-            turn: null
+            board: new Array(0),
+            turn: null,
+            rowNow: null,
+            colNow: null,
 
         }
         this.handleChangeCellNumber = this.handleChangeCellNumber.bind(this);
@@ -28,38 +30,203 @@ export default class Game extends React.Component{
 
     handleChangeCellNumber(i){
         var arrayvar = this.state.board.slice();
-        arrayvar = new Array(i).fill(new Array(i).fill(null));
-        this.setState({ board: arrayvar })
+        arrayvar = Array.apply(null, Array(i)).map(() => new Array(i).fill(null));
+        this.setState({board: arrayvar })
         this.handleChangeTurn();
     }
     
 
     shouldComponentUpdate(nextProps, nextState){
+        if(nextProps.numberCell !== null){
+            return true;
+        }
+            
         if(nextState.turn !== this.state.turn){
             return true;
         }
-        if(nextProps.numberCell !== this.props.numberCell){
+        if(nextState.board !== this.state.board){
             return true;
+            
         }
         return false;
     }
 
-    componentWillUpdate(nextProps, nextState) {    
+    componentWillUpdate(nextProps, nextState) {   
         if(nextProps.numberCell !== this.props.numberCell){
             this.handleChangeCellNumber(nextProps.numberCell);
-        }
+            this.setState({turn: 'x'});
+        } 
         if(nextState.turn !== this.state.turn){
+            
             this.props.getNextPlayer(nextState.turn);
+            console.log("hihi", nextState.board);
+            if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) === true){
+                alert("win");
+            }
         }
     }
 
     getCoodinate(row, col){
+        this.setState({rowNow: row});
+        this.setState({colNow: col})
         this.handleChangeTurn();
-        this.props.getNextPlayer(this.state.turn);
+        this.HandleSetChangeBoard(row, col);
+    }
+
+    HandleSetChangeBoard(row, col){
+        var arrayvar1 = this.state.board.slice();
+        arrayvar1[row][col] = this.state.turn;
+        this.setState({board: arrayvar1})
     }
 
     isWin(board, rowCheck, colCheck){
+        if(board === null){
+            return;
+        }
+        if(rowCheck === null || colCheck === null){
+            return;
+        }
+
+        var turn = board[rowCheck][colCheck];
+
+        let index = colCheck;
+        let count = 0;
+
+        while(index > 0){
+            index--;
+            if(board[rowCheck][index] === turn){
+                count++;
+            }
+            else{
+                index = colCheck;
+                break;   
+            }
+        }
+
+        while(index < board.length){
+            index++;
+            if(board[rowCheck][index] === turn){
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+
+        if(count >= 4){
+
+            return true;
+        }
+        else{
+            index = rowCheck;
+            count = 0;
+        }
+        //-------------------------------------------------------------
+
+        while(index > 0){
+            index--;
+            if(board[index][colCheck] === turn){
+                count++;
+            }
+            else{
+                index = rowCheck;
+                break;
+                
+            }
+        }
+
+        while(index < board.length){
+            index++;
+            if(board[index][colCheck] === turn){
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+
+        if(count >=4){
+            return true;
+        }
+        else{
+            index = rowCheck;
+            count = 0;
+        }
+
+        //------------------------------------------------------------------
+
+        let rowIndex = rowCheck;
+        let colIndex = colCheck;
+
+        while(rowIndex >0 && colIndex >0){
+            rowIndex--;
+            colIndex--;
+            if(board[rowIndex][colIndex] === turn){
+                count++
+            }
+            else{
+                rowCheck = rowCheck;
+                colIndex = colCheck;
+                break;
+            }
+        }
+
+        while(rowIndex < board.length && colIndex < board.length){
+            rowIndex++;
+            colIndex++;
+            if(board[rowIndex][colIndex] === turn){
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+
+        if(count >= 4){
+            return true;
+        }
+        else{
+            rowIndex = rowCheck;
+            colIndex = colCheck;
+            count = 0;
+        }
+
+        //--------------------------------------------------------------
+
+        while(rowIndex > 0 && colCheck < board.length){
+            rowIndex--;
+            colIndex++;
+            if(board[rowIndex][colIndex] === turn){
+                count++;
+            }
+            else{
+                rowIndex = rowCheck;
+                colIndex = colCheck;
+                break;
+            }
+        }
+
+        while(rowIndex < board.length && colIndex > 0){
+            rowIndex++;
+            colIndex--;
+            if(board[rowIndex][colIndex] === turn){
+                count++;
+            }
+            else{
+                break;
+            }
+        }
         
+        if(count >= 4){
+            return true;
+        }
+        else{
+            rowIndex = rowCheck;
+            colIndex = colCheck;
+            count = 0;
+        }
+
+        return false;
     }
 
     render()

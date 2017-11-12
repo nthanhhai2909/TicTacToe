@@ -3,7 +3,11 @@
     height: 25px;
     background-color: white;
 }
-
+.my-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 140%;
+}
 .infor{
     display: inline-block;
 
