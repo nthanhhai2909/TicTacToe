@@ -15,8 +15,6 @@ export default class Game extends React.Component{
         }
         this.handleChangeCellNumber = this.handleChangeCellNumber.bind(this);
         this.getCoodinate = this.getCoodinate.bind(this);
-
-        
     };
 
     handleChangeTurn(){
@@ -46,8 +44,11 @@ export default class Game extends React.Component{
         }
         if(nextState.board !== this.state.board){
             return true;
-            
         }
+        if(nextProps.history !== this.props.history){
+            return true;
+        }
+   
         return false;
     }
 
@@ -56,22 +57,41 @@ export default class Game extends React.Component{
             this.handleChangeCellNumber(nextProps.numberCell);
             this.setState({turn: 'x'});
         } 
+
         if(nextState.turn !== this.state.turn){
-            
             this.props.getNextPlayer(nextState.turn);
             if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) === true)
-                alert("win");
-            }
+                alert(this.state.turn + " win");
+        }
+
+        if(nextProps.history !== this.props.history ){
+            var turn;
+            var arrayvar2 = Array.apply(null, Array(this.props.numberCell)).map(() => new Array(this.props.numberCell).fill(null));
+            nextProps.history.map((ele, index) => 
+                {
+                    arrayvar2[ele[0]][ele[1]] = ele[2];
+                });
         
+            if(nextProps.history.length < 1){
+                return;
+            }
+            if(nextProps.history[nextProps.history.length - 1][2] === "x"){
+                this.props.getNextPlayer("o");
+            }
+            else{
+                this.props.getNextPlayer("x");
+            }
+            this.setState({board: arrayvar2 }) 
+        }
     }
 
     getCoodinate(row, col){
         if(this.state.board[row][col] === null){
-            console.log("hihi");
             this.setState({rowNow: row});
             this.setState({colNow: col})
             this.handleChangeTurn();
             this.HandleSetChangeBoard(row, col);
+            this.props.updateHistory([row, col, this.state.turn]);
         }
         
     }
@@ -83,6 +103,7 @@ export default class Game extends React.Component{
     }
 
     isWin(board, rowCheck, colCheck){
+
         if(board === null){
             return;
         }
@@ -117,7 +138,6 @@ export default class Game extends React.Component{
         }
 
         if(count >= 4){
-
             return true;
         }
         else{
@@ -139,6 +159,9 @@ export default class Game extends React.Component{
         }
 
         while(index < board.length){
+            if(index === (board.length -1)){
+                return;
+            }
             index++;
             if(board[index][colCheck] === turn){
                 count++;
@@ -212,6 +235,9 @@ export default class Game extends React.Component{
         while(rowIndex < board.length && colIndex > 0){
             rowIndex++;
             colIndex--;
+            if(rowIndex === board.length){
+                return;
+            }
             if(board[rowIndex][colIndex] === turn){
                 count++;
             }
@@ -233,7 +259,7 @@ export default class Game extends React.Component{
     }
 
     render()
-    { 
+    {
         return(
             <Board board={this.state.board} getCoodinate={this.getCoodinate}/>
         );
