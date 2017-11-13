@@ -3,7 +3,7 @@ import Game from './Game'
 import Header from './Header1';
 import History from './History';
 import '../css/index.css';
-import {Label, Col, FormControl, FormGroup, ControlLabel, MenuItem, DropdownButton, ButtonToolbar} from 'react-bootstrap';
+import {Label, Col, FormControl, FormGroup, ControlLabel, MenuItem, DropdownButton, ButtonToolbar, input} from 'react-bootstrap';
 
 export default class Content extends React.Component{
     constructor(props){
@@ -12,23 +12,38 @@ export default class Content extends React.Component{
             turn: "Not ready",
             numberCell: 0,
             history: [],
-            rollBackArr: []
+            rollBackArr: [],
+            sortHistory:"ascending",
         }
         this.getNextPlayer = this.getNextPlayer.bind(this);
         this.render = this.render.bind(this);
         this.updateHistory = this.updateHistory.bind(this);
         this.rollBack = this.rollBack.bind(this);
         this.reload = this.reload.bind(this);
+        this.renderNumberCell = this.renderNumberCell.bind(this);
+        this.sortHistory = this.sortHistory.bind(this);
         
-
     }   
 
+    sortHistory(){
+        if(this.state.sortHistory === "ascending"){
+            this.setState({sortHistory: "decrease"});
+        }
+        else{
+            this.setState({sortHistory: "ascending"});
+        }
+    }
     getNextPlayer(i){
         this.setState({turn: i});
     }
 
+    renderNumberCell(){
+        this.setState({reload: false});
+    }
+
     reload()
     {
+
         this.setState({history: []});
         this.setState({rollBackArr: []});
         this.setState({turn: "x"});
@@ -37,11 +52,31 @@ export default class Content extends React.Component{
     }
 
     updateHistory(move){
-        this.setState({history: [...this.state.history, move]});
+        if(this.state.sortHistory === "ascending"){
+            this.setState({history: [...this.state.history, move]});
+        }
+        else{
+            let temp = [move];
+            temp = temp.concat(this.state.history);
+            this.setState({history: temp});
+        }
+        
+
+
     }
     rollBack(index){
-        let arr = this.state.history.slice(0, index + 1);
+        let arr;
+        if(this.state.sortHistory === "decrease"){
+             arr = this.state.history.slice(index, this.state.history.length);
+        }
+        else{
+            arr = this.state.history.slice(0, index + 1);
+        }
+        
+        this.setState({history: arr});
         this.setState({rollBackArr: arr});
+        //5,4,3,2,1
+
     }
 
     handleClickSetCellNumber(i){
@@ -49,6 +84,8 @@ export default class Content extends React.Component{
         this.setState({rollBackArr: []});
         this.setState({turn: "x"});
         this.setState({numberCell: i});
+        this.setState({sortHistory: "ascending"});
+        
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -59,6 +96,12 @@ export default class Content extends React.Component{
         if(nextState.rollBackArr.length > 0 && nextState.rollBackArr !== this.state.rollBackArr){
             this.setState({rollBackArr: []});
         }
+        if(this.state.sortHistory !== nextState.sortHistory){
+            let arr = this.state.history;
+            arr.reverse();
+            this.setState({history: arr});
+        }
+        
     }
 
 
@@ -72,7 +115,7 @@ export default class Content extends React.Component{
                         <h4>Information</h4>
                         <hr/>
                         <div className="infor">
-                            <div d-inline>
+                            <div>
                                 <label>Cell Number</label>
                                 <DropdownButton bsSize="medium" title="Select cell number" id="dropdown-size-medium">
                                     <MenuItem  onClick={()=>this.handleClickSetCellNumber(10)}>10x10</MenuItem>
@@ -85,8 +128,11 @@ export default class Content extends React.Component{
                                 <label>Turn</label>
                                 <h4>{this.state.turn}</h4>
                             </div>
+
+                            <button className="btn btn-info" onClick={() => this.sortHistory()}>{this.state.sortHistory}</button>
+
                             <History history={this.state.history} rollBack={this.rollBack}/>
-      
+
                         </div>
                     </div>
                     
@@ -95,7 +141,7 @@ export default class Content extends React.Component{
                         <hr/>
                         <Game numberCell={this.state.numberCell} 
                             getNextPlayer={this.getNextPlayer} updateHistory={this.updateHistory}
-                            history={this.state.rollBackArr} reload={this.reload}
+                            history={this.state.rollBackArr} reload={this.reload} renderNumberCell={this.state.renderNumberCell}
                         />
                     </div>
                 </div>

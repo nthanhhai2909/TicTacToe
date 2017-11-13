@@ -61,7 +61,8 @@ export default class Game extends React.Component{
     }
 
     componentWillUpdate(nextProps, nextState) {  
-        if(nextProps.numberCell !== this.props.numberCell){
+        
+        if(nextProps.numberCell !== this.props.numberCell ){
             this.handleChangeCellNumber(nextProps.numberCell);
             this.setState({turn: "x"});
             this.setState({listBoxWin: []});
@@ -71,9 +72,7 @@ export default class Game extends React.Component{
             if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) !== null){
                 this.setState({listBoxWin: this.isWin(nextState.board, nextState.rowNow, nextState.colNow)});
                 alert(this.state.turn + " win");
-
                 setTimeout(() => this.reload(), 3000);
-            
             }
             else{
                 this.props.getNextPlayer(nextState.turn);  
@@ -121,7 +120,6 @@ export default class Game extends React.Component{
     }
 
     isWin(board, rowCheck, colCheck){
-
         if(board === null){
             return null;
         }
@@ -129,7 +127,7 @@ export default class Game extends React.Component{
             return null;
         }
 
-        if(rowCheck > board.length || colCheck > board.length){
+        if(rowCheck > board.length || colCheck > board.length || rowCheck < 0 || colCheck < 0){
             return null;
         }
         var turn = board[rowCheck][colCheck];
