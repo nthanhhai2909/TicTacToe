@@ -61,11 +61,6 @@ export default class Game extends React.Component{
     }
 
     componentWillUpdate(nextProps, nextState) {  
-        
-        console.log("1", nextProps.numberCell);
-        console.log("2", this.props.numberCell);
-        console.log("3", nextProps.history.length);
-        console.log("4", this.props.history.length);
         if(nextProps.numberCell !== this.props.numberCell ){
             this.handleChangeCellNumber(nextProps.numberCell);
             this.setState({turn: "x"});
@@ -79,8 +74,7 @@ export default class Game extends React.Component{
             }
             else{
                 this.props.getNextPlayer(nextState.turn);  
-            }
-           
+            } 
         }
 
         if(nextProps.history !== this.props.history ){

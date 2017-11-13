@@ -14,6 +14,7 @@ export default class Content extends React.Component{
             history: [],
             rollBackArr: [],
             sortHistory:"ascending",
+            tempNumberCell: 0,
         }
         this.getNextPlayer = this.getNextPlayer.bind(this);
         this.render = this.render.bind(this);
@@ -82,7 +83,9 @@ export default class Content extends React.Component{
         this.setState({history: []});
         this.setState({rollBackArr: []});
         this.setState({turn: "x"});
-        this.setState({numberCell: i});
+        this.setState({numberCell: -1});
+        this.setState({tempNumberCell: i});
+        this.setState({numberCell: 0});
         this.setState({sortHistory: "ascending"});
         
     }
@@ -99,6 +102,10 @@ export default class Content extends React.Component{
             let arr = this.state.history;
             arr.reverse();
             this.setState({history: arr});
+        }
+
+        if(nextState.numberCell === 0){
+            this.setState({numberCell: this.state.tempNumberCell});
         }
         
     }
