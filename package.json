@@ -2,7 +2,7 @@
   "name": "1412147",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://nthanhhai2909.github.io/tictactoe",
+  "homepage": "https://nthanhhai2909.github.io/TicTacToe",
   "dependencies": {
     "react": "^16.1.0",
     "react-bootstrap": "^0.31.5",
@@ -10,7 +10,7 @@
     "react-scripts": "1.0.17"
   },
   "scripts": {
-    "predeploy": "npm run build",
+    "predeploy":"npm run build",
     "deloy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
