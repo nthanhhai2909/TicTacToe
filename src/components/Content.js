@@ -137,7 +137,7 @@ export default class Content extends React.Component{
 
                             <button className="btn btn-info" onClick={() => this.sortHistory()}>{this.state.sortHistory}</button>
 
-                            <History history={this.state.history} rollBack={this.rollBack}/>
+                            <History history={this.state.history} rollBack={this.rollBack} sort={this.state.sortHistory}/>
 
                         </div>
                     </div>
