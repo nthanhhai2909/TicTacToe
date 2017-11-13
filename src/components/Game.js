@@ -62,11 +62,14 @@ export default class Game extends React.Component{
 
     componentWillUpdate(nextProps, nextState) {  
         
+        console.log("1", nextProps.numberCell);
+        console.log("2", this.props.numberCell);
+        console.log("3", nextProps.history.length);
+        console.log("4", this.props.history.length);
         if(nextProps.numberCell !== this.props.numberCell ){
             this.handleChangeCellNumber(nextProps.numberCell);
             this.setState({turn: "x"});
-            this.setState({listBoxWin: []});
-            
+            this.setState({listBoxWin: []}); 
         } 
         if(nextState.turn !== this.state.turn){
             if(this.isWin(nextState.board, nextState.rowNow, nextState.colNow) !== null){
@@ -81,7 +84,6 @@ export default class Game extends React.Component{
         }
 
         if(nextProps.history !== this.props.history ){
-            
             var turn;
             var arrayvar2 = Array.apply(null, Array(this.props.numberCell)).map(() => new Array(this.props.numberCell).fill(null));
             nextProps.history.map((ele, index) => 

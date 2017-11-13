@@ -9,7 +9,7 @@ export default class Content extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            turn: "Not ready",
+            turn: "-",
             numberCell: 0,
             history: [],
             rollBackArr: [],
@@ -43,11 +43,11 @@ export default class Content extends React.Component{
 
     reload()
     {
-
         this.setState({history: []});
         this.setState({rollBackArr: []});
         this.setState({turn: "x"});
         this.setState({numberCell: 0});
+        this.setState({sortHistory: "ascending"});
 
     }
 
@@ -75,7 +75,6 @@ export default class Content extends React.Component{
         
         this.setState({history: arr});
         this.setState({rollBackArr: arr});
-        //5,4,3,2,1
 
     }
 
